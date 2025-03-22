@@ -4,6 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Bot
 from database import get_user, calculate_weeks_left, async_session
 from config import BOT_TOKEN
+from sqlalchemy import text
 
 bot = Bot(token=BOT_TOKEN)
 
@@ -11,7 +12,7 @@ scheduler = AsyncIOScheduler()
 
 async def send_weekly(): 
     async with async_session() as session:
-        result = await session.execute('SELECT user_id, birth_date FROM users')
+        result = await session.execute(text('SELECT user_id, birth_date FROM users'))
         users = result.all()
         
         for user_id, birth_date in users:
